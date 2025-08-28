@@ -3,8 +3,8 @@ import {defineBddConfig} from 'playwright-bdd';
 
 const testDir =defineBddConfig(
   {
-    paths: ['MyTestPractice/login.feature'],
-    require: ['MyTestPractice/login.steps.ts']
+    paths: ['tests/login.feature'],
+    require: ['tests/login.steps.ts']
   }
 )
 
@@ -38,6 +38,8 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure'
   },
 
   /* Configure projects for major browsers */

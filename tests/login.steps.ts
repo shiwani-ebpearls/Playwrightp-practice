@@ -63,35 +63,31 @@ Then('I should see the homepage', async function () {
 });
 */
 
-import{createBdd} from 'playwright-bdd';
+import { createBdd } from 'playwright-bdd';
+import { expect } from '@playwright/test';
 
-const {Given, When , Then} =createBdd();
+const { Given, When, Then } = createBdd();
 
-import { expect, Expect } from '@playwright/test';
-
-Given('I navigate to {string}', async ({page}, url) => {
-  await page.goto(url)
-  // Step: Given I navigate to "https://stage-webapp.honeypotexclusive.com/onboarding"
-  // From: MyTestPractice/login.feature:5:2
+Given('I navigate to {string}', async ({ page }, url) => {
+  await page.goto(url);
 });
 
-Given('I click on {string}', async ({page}, Sign_in) => {
-  await page.locator('//button[contains(@class,"MuiButton-contained") and text()="Sign in"]',Sign_in).click();
-
-  // Step: And I click on "Sign_in"
-  // From: MyTestPractice/login.feature:6:2
+// ✅ One generic step for ALL buttons (Sign in + Continue)
+When('I click on {string}', async ({ page }, buttonName) => {
+  await page.locator(`button:has-text("${buttonName}")`).click();
 });
 
-When('I login with phone {string} and password {string}', async ({page}, Phone_no, Password) => {
-   await page.locator('//input[@name="phone"]', Phone_no).fill(Phone_no);
-   await page.locator('//input[@name="password"]', Password).fill(Password);
-  // Step: When I login with phone "0456 321 100" and password "Password@1"
-  // From: MyTestPractice/login.feature:7:2
+When('I login with phone {string} and password {string}', async ({ page }, phone, password) => {
+  await page.fill('input[name="phone"]', phone);
+  await page.fill('input[name="password"]', password);
 });
 
-Then('I should see the homepage', async ({page}, logged_url) => {
- await expect (page).toHaveURL(new RegExp(logged_url)); 
+Then('I should be redirected to {string}', async ({ page }, expectedUrl) => {
+  await expect(page).toHaveURL(expectedUrl);
+});
 
-  // Step: Then I should see the homepage
-  // From: MyTestPractice/login.feature:8:2
+Then('I should verify user is not able to login and url contains {string}', async ({page}, login_url) => {
+  await expect(page).toHaveURL(new RegExp(login_url));
+  // Step: Then I should verify user is not able to login and url contains "https://stage-webapp.honeypotexclusive.com/?from-login=true"
+  // From: tests/login.feature:17:2
 });
