@@ -1,32 +1,32 @@
-// Generated from: tests/login.feature
-import { test } from "playwright-bdd";
+// Generated from: tests/Features/login.feature
+import { test } from "../../../tests/Fixtures/Fixtures.ts";
 
 test.describe('Login Functionality', () => {
 
-  test('Successful Login with valid credentials', async ({ Given, When, Then, And, page }) => { 
+  test('Successful Login with valid credentials', async ({ Given, page, And, When, Then }) => { 
     await Given('I navigate to "https://stage-webapp.honeypotexclusive.com/onboarding"', null, { page }); 
-    await And('I click on "Sign in"', null, { page }); 
-    await When('I login with phone "0456 321 100" and password "Password@1"', null, { page }); 
-    await And('I click on "Continue"', null, { page }); 
-    await Then('I should be redirected to "https://stage-webapp.honeypotexclusive.com/?from-login=true"', null, { page }); 
+    await And('I click on "Sign in"'); 
+    await When('I login with phone "0456 321 100" and password "Password@1"'); 
+    await And('I click on "Continue"'); 
+    await Then('I should be redirected to "https://stage-webapp.honeypotexclusive.com/?from-login=true"'); 
   });
 
   test.describe('Verify user is not able to login with following credentials', () => {
 
-    test('Example #1', async ({ Given, When, Then, And, page }) => { 
+    test('Example #1', async ({ Given, page, And, When, Then }) => { 
       await Given('I navigate to "https://stage-webapp.honeypotexclusive.com/onboarding"', null, { page }); 
-      await And('I click on "Sign in"', null, { page }); 
-      await When('I login with phone "9812345678" and password "Test"', null, { page }); 
-      await And('I click on "Continue"', null, { page }); 
-      await Then('I should verify user is not able to login and url contains "https://stage-webapp.honeypotexclusive.com/login"', null, { page }); 
+      await And('I click on "Sign in"'); 
+      await When('I login with phone "9812345678" and password "Test"'); 
+      await And('I click on "Continue"'); 
+      await Then('I should verify user is not able to login and url contains "https://stage-webapp.honeypotexclusive.com/login"'); 
     });
 
-    test('Example #2', async ({ Given, When, Then, And, page }) => { 
+    test('Example #2', async ({ Given, page, And, When, Then }) => { 
       await Given('I navigate to "https://stage-webapp.honeypotexclusive.com/onboarding"', null, { page }); 
-      await And('I click on "Sign in"', null, { page }); 
-      await When('I login with phone "6342889989" and password "Test@123"', null, { page }); 
-      await And('I click on "Continue"', null, { page }); 
-      await Then('I should verify user is not able to login and url contains "https://stage-webapp.honeypotexclusive.com/login"', null, { page }); 
+      await And('I click on "Sign in"'); 
+      await When('I login with phone "6342889989" and password "Test@123"'); 
+      await And('I click on "Continue"'); 
+      await Then('I should verify user is not able to login and url contains "https://stage-webapp.honeypotexclusive.com/login"'); 
     });
 
   });
@@ -36,9 +36,9 @@ test.describe('Login Functionality', () => {
 // == technical section ==
 
 test.use({
-  $test: [({}, use) => use(test), { scope: 'test', box: true }],
-  $uri: [({}, use) => use('tests/login.feature'), { scope: 'test', box: true }],
-  $bddFileData: [({}, use) => use(bddFileData), { scope: "test", box: true }],
+  $test: ({}, use) => use(test),
+  $uri: ({}, use) => use('tests/Features/login.feature'),
+  $bddFileData: ({}, use) => use(bddFileData),
 });
 
 const bddFileData = [ // bdd-data-start

@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    /* Basic settings */
+    "target": "ESNext",
+    "module": "node16",
+    "moduleResolution": "node16",
+
+    /* TypeScript strictness */
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    /* Node + Playwright typings */
+    "types": ["node", "playwright", "playwright-bdd"],
+
+    /* Source maps for debugging */
+    "sourceMap": true,
+
+    /* Output directory */
+    "outDir": "dist"
+  },
+  "include": [
+    "tests/**/*.ts",
+    "steps/**/*.ts",
+    "features/**/*.ts",
+    "playwright.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
