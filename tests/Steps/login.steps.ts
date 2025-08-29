@@ -63,31 +63,36 @@ Then('I should see the homepage', async function () {
 });
 */
 
+// tests/steps/login.steps.ts
 import { createBdd } from 'playwright-bdd';
-import { expect } from '@playwright/test';
+import { test, expect } from '../Fixtures/Fixtures';
+import { LoginObj } from '../Pages/Loginobj';
 
-const { Given, When, Then } = createBdd();
+const { Given, When, Then } = createBdd(test);
+
+let loginPage: LoginObj;
 
 Given('I navigate to {string}', async ({ page }, url) => {
-  await page.goto(url);
+  loginPage = new LoginObj(page);
+  await loginPage.goto(url);
 });
 
-// ✅ One generic step for ALL buttons (Sign in + Continue)
-When('I click on {string}', async ({ page }, buttonName) => {
-  await page.locator(`button:has-text("${buttonName}")`).click();
+When('I click on {string}', async ({}, buttonName) => {
+  if (buttonName === "Sign in") {
+    await loginPage.clickSignIn();
+  } else if (buttonName === "Continue") {
+    await loginPage.clickContinue();
+  }
 });
 
-When('I login with phone {string} and password {string}', async ({ page }, phone, password) => {
-  await page.fill('input[name="phone"]', phone);
-  await page.fill('input[name="password"]', password);
+When('I login with phone {string} and password {string}', async ({}, phone, password) => {
+  await loginPage.login(phone, password);
 });
 
-Then('I should be redirected to {string}', async ({ page }, expectedUrl) => {
-  await expect(page).toHaveURL(expectedUrl);
+Then('I should be redirected to {string}', async ({}, expectedUrl) => {
+  await loginPage.assertRedirectedTo(expectedUrl);
 });
 
-Then('I should verify user is not able to login and url contains {string}', async ({page}, login_url) => {
-  await expect(page).toHaveURL(new RegExp(login_url));
-  // Step: Then I should verify user is not able to login and url contains "https://stage-webapp.honeypotexclusive.com/?from-login=true"
-  // From: tests/login.feature:17:2
+Then('I should verify user is not able to login and url contains {string}', async ({}, login_url) => {
+  await loginPage.assertLoginFailed(login_url);
 });
