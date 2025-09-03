@@ -1,4 +1,4 @@
-Feature: Like Profiles
+Feature:Like Profiles
 
   As a logged-in user
   I want to like multiple profiles
