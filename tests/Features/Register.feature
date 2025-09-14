@@ -1,15 +1,22 @@
-Feature: User Registration Flow
+Feature: User onboarding and subscription
+  As a new user
+  I want to complete the registration flow
+  So that I can start using Honeypot Exclusive
 
-  Scenario: Successfully navigate from onboarding to register and submit phone number
-    Given I navigate to "https://stage-webapp.honeypotexclusive.com/onboarding"
-    When I check the terms and conditions checkbox
-    And I click on "Create an account" button
-    Then I should be redirected to "https://stage-webapp.honeypotexclusive.com/register"
-    When I enter phone number "440711223" in the "My number is" field
-    And I click on the registration continue button
-    When I enter OTP "123456" in the OTP input field
-    And I click on the OTP continue button
-    Then I should be redirected to the Password setup page
-    When I enter password and new Password "SecurePass123!" in the password and confirm password fields
-    And I click on the profile creation continue button
-    Then I should be redirected to the My Birthday is page
+  Scenario: Successful registration, profile setup and subscription
+    Given I am on the onboarding page
+    When I accept the terms and start registration
+    And I provide my phone number
+    And I verify my code
+    And I set my password
+    And I enter my birthday
+    And I select my gender
+    And I choose my preferences
+    And I enter my first name
+    And I select my interests
+    And I choose what I am looking for
+    And I upload my profile images and bio
+    And I set my location
+    And I select a subscription plan
+    And I complete PayPal login and checkout
+    Then I should see the start matching option

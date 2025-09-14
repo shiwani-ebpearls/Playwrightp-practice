@@ -25,7 +25,7 @@
     "steps/**/*.ts",
     "features/**/*.ts",
     "playwright.config.ts"
-  ],
+, ".features-gen/registerautomate.spec.ts", ".features-gen/tests/features/registerautomate.spec.ts"  ],
   "exclude": [
     "node_modules",
     "dist"

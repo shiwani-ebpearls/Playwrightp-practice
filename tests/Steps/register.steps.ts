@@ -1,80 +1,79 @@
-import { createBdd } from 'playwright-bdd';
-import { expect } from '@playwright/test';
-import { RegisterPage } from '../pages/RegisterPage';
+import { expect } from "@playwright/test";
+import { RegisterPage } from "../pages/RegisterPage";
+import { page } from "../support/hooks";
+import { createBdd } from "playwright-bdd";
 
 const { Given, When, Then } = createBdd();
 
+
 let registerPage: RegisterPage;
 
-
-// Initialize page object after navigation (use page fixture)
-Given('I am on the registration page', async ({ page }) => {
+Given("I am on the onboarding page", async () => {
   registerPage = new RegisterPage(page);
+  await registerPage.gotoOnboarding();
 });
 
-// Registration specific steps
-When('I click on "Create an account" button', async ({ page }) => {
-  await page.locator('button:has-text("Create an account")').click();
+When("I accept the terms and start registration", async () => {
+  await registerPage.acceptTerms();
 });
 
-When('I enter phone number {string} in the "My number is" field', async ({ page }, phone: string) => {
+When("I provide my phone number", async () => {
   if (!registerPage) registerPage = new RegisterPage(page);
     const randomPhone = "440" + Math.floor(100000 + Math.random() * 900000).toString();
-await registerPage.enterPhoneNumber(randomPhone);
+  await registerPage.enterPhoneNumber(randomPhone);
 });
 
-When('I click on the registration continue button', async ({ page }) => {
-  if (!registerPage) registerPage = new RegisterPage(page);
-  await registerPage.clickRegistrationContinue();
+When("I verify my code", async () => {
+  await registerPage.verifyCode("123456");
 });
 
-
-When('I enter OTP {string} in the OTP input field', async ({ page }, otp: string) => {
-  if (!registerPage) registerPage = new RegisterPage(page);
-
-  // Wait until at least the first OTP box is visible
-  await expect(registerPage.otpInputField.first()).toBeVisible( );
-
-  // Fill the OTP digits
-  await registerPage.enterOtp(otp);
+When("I set my password", async () => {
+  await registerPage.setPassword("Password@1");
 });
 
-When('I click on the OTP continue button', async ({ page }) => {
-  if (!registerPage) registerPage = new RegisterPage(page);
-  await registerPage.clickOtpContinue();
+When("I enter my birthday", async () => {
+  await registerPage.enterBirthday("1998", "1");
 });
 
-Then('I should be redirected to the Password setup page', async ({ page }) => {
-  if (!registerPage) registerPage = new RegisterPage(page);
-  await expect(registerPage.passwordField).toBeVisible();
+When("I select my gender", async () => {
+  await registerPage.selectGender("Female");
 });
 
-When('I enter password {string} in the password field', async ({ page }, password: string) => {
-  if (!registerPage) registerPage = new RegisterPage(page);
-  await registerPage.enterPassword(password);
+When("I choose my preferences", async () => {
+  await registerPage.choosePreferences();
 });
 
-When('I click on the password continue button', async ({ page }) => {
-  if (!registerPage) registerPage = new RegisterPage(page);
-  await registerPage.clickPasswordContinue();
+When("I enter my first name", async () => {
+  await registerPage.enterFirstName("automationtest2");
 });
 
-Then('I should be redirected to the Profile creation page', async ({ page }) => {
-  if (!registerPage) registerPage = new RegisterPage(page);
-  await expect(registerPage.profileCreationText).toBeVisible( );
+When("I select my interests", async () => {
+  await registerPage.selectInterests();
 });
 
-When('I enter password and new Password {string} in the password and confirm password fields', async ({ page }, password: string) => {
-  if (!registerPage) registerPage = new RegisterPage(page);
-  await registerPage.enterProfilePasswords(password, password);
+When("I choose what I am looking for", async () => {
+  await registerPage.chooseLookingFor();
 });
 
-When('I click on the profile creation continue button', async ({ page }) => {
-  if (!registerPage) registerPage = new RegisterPage(page);
-  await registerPage.clickProfileContinue();
+When("I upload my profile images and bio", async () => {
+  await registerPage.uploadImagesAndBio();
 });
 
-Then('I should be redirected to the My Birthday is page', async ({ page }) => {
-  await expect(page.locator('text=My Birthday is')).toBeVisible();
+When("I set my location", async () => {
+  await registerPage.setLocation("sydney");
 });
 
+When("I select a subscription plan", async () => {
+  await registerPage.selectSubscription();
+});
+
+When("I complete PayPal login and checkout", async () => {
+  await registerPage.completePayPal(
+    "sb-gp54l39381708@personal.example.com",
+    "YE0N0x*R"
+  );
+});
+
+Then("I should see the start matching option", async () => {
+  await expect(page.getByRole("button", { name: "Start matching" })).toBeVisible();
+});
