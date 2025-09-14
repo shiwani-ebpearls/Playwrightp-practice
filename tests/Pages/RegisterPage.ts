@@ -1,4 +1,5 @@
 import { Page, Locator } from "@playwright/test";
+import path from "path";
 
 export class RegisterPage {
   readonly page: Page;
@@ -77,14 +78,46 @@ export class RegisterPage {
   }
 
   async uploadImagesAndBio() {
-    await this.page.locator(".MuiBox-root.mui-gk1t2e").first().click();
-    await this.page.locator(".MuiBox-root.mui-3m8j6n").first().setInputFiles("pexels-guilhermealmeida-1858175.jpg");
-    await this.page.locator(".MuiBox-root.mui-gk1t2e > svg").first().click();
-    await this.page.locator(".MuiBox-root.mui-3m8j6n").first().setInputFiles("pexels-olly-774909.jpg");
-    await this.page.locator(".MuiBox-root.mui-3m8j6n").first().setInputFiles("pexels-moose-photos-170195-1036623.jpg");
-    await this.page.getByRole("textbox").fill("This is test honey user");
-    await this.page.getByRole("button", { name: "Continue" }).click();
+
+    const images = [
+      "pexels-guilhermealmeida-1858175.jpg",
+      "pexels-olly-774909.jpg",
+      "pexels-moose-photos-170195-1036623.jpg",
+    ];
+
+    // Locate all hidden file inputs under labels
+    const fileInputs = this.page.locator('label.MuiBox-root.mui-3m8j6n > input[type="file"]');
+
+    // Upload images one by one
+    for (let i = 0; i < images.length; i++) {
+      const filePath = path.resolve(__dirname, "../downloads", images[i]);
+
+      // Set the file on the corresponding input
+      await fileInputs.nth(i).setInputFiles(filePath);
+
+      // Wait for preview to appear
+      const preview = this.page.locator('.MuiBox-root.mui-gk1t2e img').nth(i);
+      if ((await preview.count()) > 0) {
+        await preview.waitFor({ state: "visible", timeout: 5000 });
+      } else {
+        await this.page.waitForTimeout(500); // fallback
+      }
+    }
+
+    // Fill bio textarea
+    const bioTextarea = this.page.locator('textarea[name="bio"]');
+    await bioTextarea.fill("This is test honey user");
+
+    // Click Continue button
+    const continueBtn = this.page.locator('button[type="submit"]');
+    await continueBtn.waitFor({ state: 'visible', timeout: 10000 });
+
+    // Click safely
+    await continueBtn.click();
+
   }
+
+
 
   async setLocation(location: string) {
     await this.page.getByRole("combobox", { name: "Enter your location here" }).fill(location);
